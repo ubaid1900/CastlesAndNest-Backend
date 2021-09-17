@@ -1,0 +1,53 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>aspnet-Backend-0BA9BC19-8E0C-4CB6-AF7F-81E8D214F43F</UserSecretsId>
+    <WebProject_DirectoryAccessLevelKey>0</WebProject_DirectoryAccessLevelKey>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20210704073547_initial.cs" />
+    <Compile Remove="Migrations\20210704073547_initial.Designer.cs" />
+    <Compile Remove="Migrations\20210704073732_initial.cs" />
+    <Compile Remove="Migrations\20210704073732_initial.Designer.cs" />
+    <Compile Remove="Migrations\20210704152849_customerModel.cs" />
+    <Compile Remove="Migrations\20210704152849_customerModel.Designer.cs" />
+    <Compile Remove="Migrations\20210706180304_initial.cs" />
+    <Compile Remove="Migrations\20210706180304_initial.Designer.cs" />
+    <Compile Remove="Migrations\20210706180723_initial.cs" />
+    <Compile Remove="Migrations\20210706180723_initial.Designer.cs" />
+    <Compile Remove="Migrations\20210706181031_initial.cs" />
+    <Compile Remove="Migrations\20210706181031_initial.Designer.cs" />
+    <Compile Remove="Migrations\20210706184609_initial.cs" />
+    <Compile Remove="Migrations\20210706184609_initial.Designer.cs" />
+    <Compile Remove="Migrations\20210814063202_orders.cs" />
+    <Compile Remove="Migrations\20210814063202_orders.Designer.cs" />
+    <Compile Remove="Migrations\20210814063317_orders.cs" />
+    <Compile Remove="Migrations\20210814063317_orders.Designer.cs" />
+    <Compile Remove="Migrations\20210814063625_orders.cs" />
+    <Compile Remove="Migrations\20210814063625_orders.Designer.cs" />
+    <Compile Remove="Migrations\20210814064030_orders.cs" />
+    <Compile Remove="Migrations\20210814064030_orders.Designer.cs" />
+    <Compile Remove="Migrations\20210814064441_orders.cs" />
+    <Compile Remove="Migrations\20210814064441_orders.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Apis.Auth.AspNetCore3" Version="1.54.0" />
+    <PackageReference Include="MailKit" Version="2.14.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="3.1.16" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.16" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.16" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.17" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.16" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.16" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.15" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.15">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
+  </ItemGroup>
+
+</Project>
