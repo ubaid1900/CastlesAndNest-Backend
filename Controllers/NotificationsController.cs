@@ -15,10 +15,10 @@ namespace Backend.Controllers
     [ApiController]
     public class NotificationsController : ControllerBase
     {
-        private readonly BooksAppDbContext context;
+        private readonly MyAppDbContext context;
         private readonly ILogger<NotificationsController> logger;
 
-        public NotificationsController(BooksAppDbContext context, ILogger<NotificationsController> logger)
+        public NotificationsController(MyAppDbContext context, ILogger<NotificationsController> logger)
         {
             this.context = context;
             this.logger = logger;

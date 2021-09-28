@@ -16,9 +16,9 @@ namespace Backend.Controllers
     public class BooksController : ControllerBase
     {
         private readonly ILogger<BooksController> _logger;
-        private readonly BooksAppDbContext _context;
+        private readonly MyAppDbContext _context;
 
-        public BooksController(BooksAppDbContext context, ILogger<BooksController> logger)
+        public BooksController(MyAppDbContext context, ILogger<BooksController> logger)
         {
             _logger = logger;
             _context = context;

@@ -14,9 +14,9 @@ namespace Backend.Controllers
     [ApiController]
     public class AddressesController : ControllerBase
     {
-        private readonly BooksAppDbContext _context;
+        private readonly MyAppDbContext _context;
 
-        public AddressesController(BooksAppDbContext context)
+        public AddressesController(MyAppDbContext context)
         {
             _context = context;
         }

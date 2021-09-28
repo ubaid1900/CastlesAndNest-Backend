@@ -14,9 +14,9 @@ namespace Backend.Controllers
     [ApiController]
     public class SubjectsController : ControllerBase
     {
-        private readonly BooksAppDbContext _context;
+        private readonly MyAppDbContext _context;
 
-        public SubjectsController(BooksAppDbContext context)
+        public SubjectsController(MyAppDbContext context)
         {
             _context = context;
         }

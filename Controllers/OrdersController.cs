@@ -23,13 +23,13 @@ namespace Backend.Controllers
     [Authorize]
     public class OrdersController : ControllerBase
     {
-        private readonly BooksAppDbContext context;
+        private readonly MyAppDbContext context;
         private readonly ILogger<OrdersController> logger;
         private readonly IWebHostEnvironment webHostEnvironment;
         private readonly IEmailService emailService;
         private readonly IConfiguration configuration;
 
-        public OrdersController(BooksAppDbContext context, ILogger<OrdersController> logger, IWebHostEnvironment webHostEnvironment
+        public OrdersController(MyAppDbContext context, ILogger<OrdersController> logger, IWebHostEnvironment webHostEnvironment
             , IEmailService emailService, IConfiguration configuration)
         {
             this.context = context;

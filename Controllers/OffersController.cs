@@ -17,11 +17,11 @@ namespace Backend.Controllers
     [ApiController]
     public class OffersController : ControllerBase
     {
-        private readonly BooksAppDbContext _context;
+        private readonly MyAppDbContext _context;
         private readonly ILogger<OffersController> _logger;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public OffersController(BooksAppDbContext context, ILogger<OffersController> logger, IWebHostEnvironment webHostEnvironment)
+        public OffersController(MyAppDbContext context, ILogger<OffersController> logger, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             _logger = logger;

@@ -48,7 +48,7 @@ namespace Backend
             {
                 c.AddPolicy("AllowOrigin", options => options.WithOrigins(arrAllowedOrigins));
             });
-            services.AddDbContext<BooksAppDbContext>(options =>
+            services.AddDbContext<MyAppDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
@@ -62,7 +62,7 @@ namespace Backend
                 opt.Lockout.AllowedForNewUsers = true;
                 opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(2);
                 opt.Lockout.MaxFailedAccessAttempts = 3;
-            }).AddEntityFrameworkStores<BooksAppDbContext>()
+            }).AddEntityFrameworkStores<MyAppDbContext>()
 
                 .AddDefaultTokenProviders();
 
@@ -104,7 +104,7 @@ namespace Backend
             services.AddScoped<IEmailService, EmailService>();
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, BooksAppDbContext dataContext)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, MyAppDbContext dataContext)
         {
             //foreach (var item in dataContext.Orders)
             //{

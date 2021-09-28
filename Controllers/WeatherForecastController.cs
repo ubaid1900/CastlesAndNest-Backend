@@ -27,10 +27,10 @@ namespace Backend.Controllers
         private readonly ILogger<WeatherForecastController> logger;
         private readonly IEmailService emailService;
         private readonly IConfiguration configuration;
-        private readonly BooksAppDbContext context;
+        private readonly MyAppDbContext context;
 
         public WeatherForecastController(ILogger<WeatherForecastController> logger, IEmailService emailService
-            , IConfiguration configuration, BooksAppDbContext context)
+            , IConfiguration configuration, MyAppDbContext context)
         {
             this.logger = logger;
             this.emailService = emailService;

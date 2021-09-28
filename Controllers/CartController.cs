@@ -17,11 +17,11 @@ namespace Backend.Controllers
     public class CartController : ControllerBase
     {
 
-        private readonly BooksAppDbContext _context;
+        private readonly MyAppDbContext _context;
         private readonly ILogger<CartController> _logger;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public CartController(BooksAppDbContext context, ILogger<CartController> logger, IWebHostEnvironment webHostEnvironment)
+        public CartController(MyAppDbContext context, ILogger<CartController> logger, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             _logger = logger;

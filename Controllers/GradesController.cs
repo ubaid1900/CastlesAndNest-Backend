@@ -14,9 +14,9 @@ namespace Backend.Controllers
     [ApiController]
     public class GradesController : ControllerBase
     {
-        private readonly BooksAppDbContext _context;
+        private readonly MyAppDbContext _context;
 
-        public GradesController(BooksAppDbContext context)
+        public GradesController(MyAppDbContext context)
         {
             _context = context;
         }
