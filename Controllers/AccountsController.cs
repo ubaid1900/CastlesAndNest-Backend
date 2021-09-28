@@ -18,12 +18,12 @@ namespace Backend.Controllers
     [ApiController]
     public class AccountsController : ControllerBase
     {
-        private readonly BooksAppDbContext _context;
+        private readonly CastlesAndNestAppDbContext _context;
         private readonly ILogger<AccountsController> _logger;
         private readonly JwtHandler _jwtHandler;
         private readonly UserManager<User> _userManager;
 
-        public AccountsController(UserManager<User> userManager, JwtHandler jwtHandler, BooksAppDbContext context, ILogger<AccountsController> logger)
+        public AccountsController(UserManager<User> userManager, JwtHandler jwtHandler, CastlesAndNestAppDbContext context, ILogger<AccountsController> logger)
         {
             _userManager = userManager;
             _jwtHandler = jwtHandler;

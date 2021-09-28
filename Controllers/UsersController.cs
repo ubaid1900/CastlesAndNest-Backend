@@ -20,12 +20,12 @@ namespace Backend.Controllers
     [Authorize]
     public class UsersController : ControllerBase
     {
-        private readonly BooksAppDbContext _context;
+        private readonly CastlesAndNestAppDbContext _context;
         private readonly ILogger<UsersController> _logger;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly UserManager<User> _userManager;
 
-        public UsersController(BooksAppDbContext context, ILogger<UsersController> logger, IWebHostEnvironment webHostEnvironment, UserManager<User> userManager)
+        public UsersController(CastlesAndNestAppDbContext context, ILogger<UsersController> logger, IWebHostEnvironment webHostEnvironment, UserManager<User> userManager)
         {
             _context = context;
             _logger = logger;

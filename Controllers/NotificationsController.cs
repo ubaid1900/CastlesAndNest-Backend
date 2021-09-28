@@ -15,10 +15,10 @@ namespace Backend.Controllers
     [ApiController]
     public class NotificationsController : ControllerBase
     {
-        private readonly BooksAppDbContext context;
+        private readonly CastlesAndNestAppDbContext context;
         private readonly ILogger<NotificationsController> logger;
 
-        public NotificationsController(BooksAppDbContext context, ILogger<NotificationsController> logger)
+        public NotificationsController(CastlesAndNestAppDbContext context, ILogger<NotificationsController> logger)
         {
             this.context = context;
             this.logger = logger;
@@ -29,7 +29,7 @@ namespace Backend.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<bool> Get()
         {
-            return await context.Books.AnyAsync(book => book.AvailableQuantity <= book.ReorderLevel);
+            return false;
         }
     }
 }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Backend.Models
 {
 
-    public class Book
+    public class Product
     {
         public int Id { get; set; }
 
@@ -19,34 +19,15 @@ namespace Backend.Models
         [Required]
         public string Description { get; set; }
         public string ISBN { get; set; }
-        public int GradeId { get; set; }
-        public Grade Grade { get; set; }
-        public int SubjectId { get; set; }
-        public Subject Subject { get; set; }
         [Column(TypeName = "money")] public decimal Price { get; set; }
 
-        public int? AuthorId { get; set; }
-        public Author Author { get; set; }
-
         public int AvailableQuantity { get; set; }
-        public ICollection<BookImages> Images { get; set; }
+        public ICollection<ProductImages> Images { get; set; }
         public bool Exclude { get; set; }
         public int ReorderLevel { get; set; }
     }
 
-    public class Grade
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-    }
-
-    public class Subject
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-    }
-
-    public class BookImages
+    public class ProductImages
     {
         public int Id { get; set; }
         public int BookId { get; set; }
@@ -60,39 +41,14 @@ namespace Backend.Models
         public decimal Savings { get; internal set; }
     }
 
-    public class CartItemBase
+    public class CartItem
     {
-        public CartItemType ItemType { get; set; }
         public int ItemId { get; set; }
-        public int Quantity { get; set; }
-    }
-
-    public class CartItem : CartItemBase
-    {
-        public CartItem(CartItemBase cartItemBase)
-        {
-            ItemType = cartItemBase.ItemType;
-            ItemId = cartItemBase.ItemId;
-            Quantity = cartItemBase.Quantity;
-        }
-        public decimal BookPrice { get; set; }
-        public OfferPricingDetails OfferPricingDetails { get; set; }
+        public int OrderQuantity { get; set; }
+        public decimal Price { get; set; }
         public string Description { get; set; }
         public string ImageUrl { get; set; }
         public int AvailableQuantity { get; set; }
-    }
-
-    public class OfferPricingDetails
-    {
-        public decimal PriceBeforeDiscount { get; set; }
-        public decimal PriceAfterDiscount { get; set; }
-        public decimal SavingsAmount { get; set; }
-    }
-
-    public enum CartItemType
-    {
-        Book,
-        Offer
     }
     public class Order
     {
@@ -121,10 +77,9 @@ namespace Backend.Models
         public string Firstname { get; set; }
         public string Lastname { get; set; }
         public string PhoneNumber { get; set; }
-        public List<OrderBookItem> BookItems { get; set; }
-        public List<OrderOfferItem> OfferItems { get; set; }
+        public List<Product> OrderItems { get; set; }
         [NotMapped]
-        public List<CartItemBase> Items { get; set; }
+        public List<CartItem> CartItems { get; set; }
     }
     public class Payment
     {
@@ -141,59 +96,6 @@ namespace Backend.Models
         CreditCard,
         DebitCard,
         UPI
-    }
-    public class OrderBookItem
-    {
-        public int OrderId { get; set; }
-        // TODO:https://stackoverflow.com/questions/65873276/createdataction-returns-500-on-success#comment116486452_65875132
-        //public Order Order { get; set; }
-        public int BookId { get; set; }
-        public Book Book { get; set; }
-        public int Quantity { get; set; }
-        [DataType(DataType.Currency)]
-        [Column(TypeName = "decimal(18,2)")]
-        public decimal Price { get; set; }
-    }
-    public class OrderOfferItem
-    {
-        public int OrderId { get; set; }
-        // TODO:https://stackoverflow.com/questions/65873276/createdataction-returns-500-on-success#comment116486452_65875132
-        //public Order Order { get; set; } 
-        public int OfferId { get; set; }
-        public Offer Offer { get; set; }
-        // field to save book ids and their prices at the order time
-        public string OfferDetails { get; set; }
-        public int Quantity { get; set; }
-        public int DiscountPercentage { get; set; }
-    }
-
-    public class Offer
-    {
-        public int Id { get; set; }
-        public string Description { get; set; }
-        public DateTime Starts { get; set; }
-        public DateTime? Deadline { get; set; }
-        public int DiscountPercentage { get; set; }
-        public string ImageUrl { get; set; }
-        public ICollection<OfferItem> OfferItems { get; set; }
-    }
-    public class OfferItem
-    {
-        public int OfferId { get; set; }
-        public Offer Offer { get; set; }
-        public int BookId { get; set; }
-        public Book Book { get; set; }
-    }
-    public class Author
-    {
-        public int Id { get; set; }
-        public string Lastname { get; set; }
-        public string Firstname { get; set; }
-    }
-    public class Publisher
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
     }
     public class User : IdentityUser<string>
     {

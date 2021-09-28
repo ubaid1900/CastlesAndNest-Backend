@@ -23,13 +23,13 @@ namespace Backend.Controllers
     [Authorize]
     public class OrdersController : ControllerBase
     {
-        private readonly BooksAppDbContext context;
+        private readonly CastlesAndNestAppDbContext context;
         private readonly ILogger<OrdersController> logger;
         private readonly IWebHostEnvironment webHostEnvironment;
         private readonly IEmailService emailService;
         private readonly IConfiguration configuration;
 
-        public OrdersController(BooksAppDbContext context, ILogger<OrdersController> logger, IWebHostEnvironment webHostEnvironment
+        public OrdersController(CastlesAndNestAppDbContext context, ILogger<OrdersController> logger, IWebHostEnvironment webHostEnvironment
             , IEmailService emailService, IConfiguration configuration)
         {
             this.context = context;
@@ -71,8 +71,7 @@ namespace Backend.Controllers
             {
                 return await filterQuery
                     .OrderByDescending(o => o.Date)
-                    .Include(o => o.BookItems).ThenInclude(bi => bi.Book)
-                    .Include(o => o.OfferItems).ThenInclude(oi => oi.Offer).ThenInclude(offer => offer.OfferItems).ThenInclude(oi => oi.Book)
+                    .Include(o => o.OrderItems)
                     .ToListAsync();
             }
             else
@@ -80,8 +79,7 @@ namespace Backend.Controllers
                 filterQuery = filterQuery.Where(o => o.UserId == User.Identity.Name);
                 return await filterQuery
                     .OrderByDescending(o => o.Date)
-                    .Include(o => o.BookItems).ThenInclude(bi => bi.Book)
-                    .Include(o => o.OfferItems).ThenInclude(oi => oi.Offer).ThenInclude(offer => offer.OfferItems).ThenInclude(oi => oi.Book)
+                    .Include(o => o.OrderItems)
                     .ToListAsync();
             }
         }
@@ -101,8 +99,7 @@ namespace Backend.Controllers
         {
             var query = context.Orders
                 .Include(o => o.Payment)
-                .Include(o => o.BookItems).ThenInclude(bi => bi.Book)
-                .Include(o => o.OfferItems).ThenInclude(oi => oi.Offer).ThenInclude(offer => offer.OfferItems).ThenInclude(oi => oi.Book)
+                .Include(o => o.OrderItems)
                 .AsNoTracking();
 
             var order = await query.FirstOrDefaultAsync(o => o.Id == id);
@@ -206,41 +203,20 @@ namespace Backend.Controllers
                 order.ShippingAddressZip = shippingAddress.Zip;
             }
             #endregion
-            order.BookItems = new List<OrderBookItem>();
-            order.OfferItems = new List<OrderOfferItem>();
+            order.OrderItems = new List<Product>();
             Dictionary<int, int> booksQuantitiesOrdered = new Dictionary<int, int>();
-            foreach (var item in order.Items)
+            foreach (var item in order.CartItems)
             {
-                if (item.ItemType == CartItemType.Book)
+                var book = await context.Products.FindAsync(item.ItemId);
+                order.CartItems.Add(new CartItem()
                 {
-                    var book = await context.Books.FindAsync(item.ItemId);
-                    order.BookItems.Add(new OrderBookItem()
-                    {
-                        BookId = item.ItemId,
-                        Price = book.Price,
-                        Quantity = item.Quantity
-                    });
-                    booksQuantitiesOrdered[book.Id] = book.AvailableQuantity - item.Quantity;
-                    book.AvailableQuantity = booksQuantitiesOrdered[book.Id];
-                }
-                if (item.ItemType == CartItemType.Offer)
-                {
-                    var offer = await context.Offers.Include(o => o.OfferItems).ThenInclude(oi => oi.Book)
-                        .FirstAsync(o => o.Id == item.ItemId);
-                    order.OfferItems.Add(new OrderOfferItem()
-                    {
-                        OfferId = item.ItemId,
-                        DiscountPercentage = offer.DiscountPercentage,
-                        Quantity = item.Quantity,
-                        OfferDetails = JsonConvert.SerializeObject(offer.OfferItems.Select(oi => new { oi.Book.Id, oi.Book.Price }))
-                    });
-                    foreach (var oItem in offer.OfferItems)
-                    {
-                        var book = oItem.Book;
-                        booksQuantitiesOrdered[book.Id] = book.AvailableQuantity - item.Quantity;
-                        book.AvailableQuantity = booksQuantitiesOrdered[book.Id];
-                    }
-                }
+                    ItemId = item.ItemId, 
+                    Price = book.Price,
+                    OrderQuantity = item.AvailableQuantity
+                });
+                booksQuantitiesOrdered[book.Id] = book.AvailableQuantity - item.OrderQuantity;
+                book.AvailableQuantity = booksQuantitiesOrdered[book.Id];
+
             }
             context.Orders.Add(order);
             await context.SaveChangesAsync();
@@ -255,8 +231,7 @@ namespace Backend.Controllers
             StringBuilder sb = new StringBuilder();
             sb.Append($"<h1>Hello { order.Firstname } {order.Lastname},</h1>");
             sb.Append($"<h2>Order Summary for Order # { order.Id} </h2>");
-            sb.Append($"<div>{BuildBooks(order.BookItems)}</div>");
-            sb.Append($"<div>{BuildItemList(order.OfferItems)}</div>");
+            sb.Append($"<div>{BuildBooks(order.CartItems)}</div>");
             sb.Append($"<h3>Subtotal: {order.Subtotal:c2} " +
                 $"Shipping & Handling: {order.ShippingCost:c2} " +
                 $"Total: {order.Subtotal + order.ShippingCost:c2} billed to {order.BillingAddressStreetnumber} " +
@@ -268,36 +243,16 @@ namespace Backend.Controllers
             var companyInfo = configuration.GetSection("CompanyInformation").Get<CompanyInformation>();
             sb.Append($"<div>For any questions or concerns, contact us at: {companyInfo.Email} {companyInfo.Phonenumber} </div>");
             await emailService.SendAsync(order.UserId, companyInfo.Email,
-                $"Your { companyInfo.Name } order of {order.Items.Count} item(s)", sb.ToString());
+                $"Your { companyInfo.Name } order of {order.CartItems.Count} item(s)", sb.ToString());
         }
 
-        private string BuildItemList(List<OrderOfferItem> offers)
-        {
-            StringBuilder sb = new StringBuilder();
-            foreach (var offer in offers)
-            {
-                StringBuilder sbItems = new StringBuilder();
-                decimal runningTotal = 0;
-                foreach (var item in offer.Offer.OfferItems)
-                {
-                    runningTotal += item.Book.Price;
-                    sbItems.Append($"<li><span>{item.Book.Description}</span> @ <span>{item.Book.Price:c2}</span></li>");
-                }
-                sb.Append($"<h3>Offer # { offer.Offer.Description} </h3>");
-                sb.Append($"<div>Price after {offer.DiscountPercentage}% discount: {(runningTotal - (runningTotal * offer.DiscountPercentage / 100)) * offer.Quantity:c2}</div>");
-                sb.Append("<h3>Books in offer: </h3>");
-                sb.Append($"<ol>{sbItems}</ol>");
-            }
 
-            return $"<ul>{sb}</ul>";
-        }
-
-        private string BuildBooks(IEnumerable<OrderBookItem> books)
+        private string BuildBooks(IEnumerable<CartItem> books)
         {
             StringBuilder sb = new StringBuilder();
             foreach (var book in books)
             {
-                sb.Append($"<li><span>{book.Book.Description}</span> @ <span>{book.Price:c2} * {book.Quantity} = {book.Price * book.Quantity:c2}</span></li>");
+                sb.Append($"<li><span>{book.Description}</span> @ <span>{book.Price:c2} * {book.OrderQuantity} = {book.Price * book.OrderQuantity:c2}</span></li>");
             }
             return $"<ul>{sb}</ul>";
         }

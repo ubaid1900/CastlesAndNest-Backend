@@ -17,11 +17,11 @@ namespace Backend.Controllers
     public class CartController : ControllerBase
     {
 
-        private readonly BooksAppDbContext _context;
+        private readonly CastlesAndNestAppDbContext _context;
         private readonly ILogger<CartController> _logger;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public CartController(BooksAppDbContext context, ILogger<CartController> logger, IWebHostEnvironment webHostEnvironment)
+        public CartController(CastlesAndNestAppDbContext context, ILogger<CartController> logger, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             _logger = logger;
@@ -44,15 +44,12 @@ namespace Backend.Controllers
         // POST api/<CartController>
         [HttpPost]
         // TODO: make it async
-        public ActionResult<Cart> Post([FromBody] ICollection<CartItemBase> items)
+        public ActionResult<Cart> Post([FromBody] ICollection<CartItem> items)
         {
-            var bookItemIds = items.Where(item => item.ItemType == CartItemType.Book).Select(item => item.ItemId);
-            var offerItemIds = items.Where(item => item.ItemType == CartItemType.Offer).Select(item => item.ItemId);
-            var books = _context.Books.Include(book => book.Images)
-                .Where(book => bookItemIds.Contains(book.Id))
+            var itemIds = items.Select(item => item.ItemId);
+            var books = _context.Products.Include(book => book.Images)
+                .Where(book => itemIds.Contains(book.Id))
                 .ToList();
-            var offers = _context.Offers.Include(offer => offer.OfferItems).ThenInclude(oi => oi.Book)
-                .Where(offer => offerItemIds.Contains(offer.Id)).ToList();
             var cart = new Cart
             {
                 Items = new List<CartItem>()
@@ -61,41 +58,20 @@ namespace Backend.Controllers
             decimal runningSavings = decimal.Zero;
             foreach (var item in items)
             {
-                CartItem cartItem = new CartItem(item);
-                if (item.ItemType == CartItemType.Book)
-                {
-                    var bookEntry = books.First(book => book.Id == item.ItemId);
-                    cartItem.Description = bookEntry.Description;
-                    cartItem.ImageUrl = bookEntry.Images.Count > 0 ? bookEntry.Images.First().ImageUrl : string.Empty;
-                    cartItem.BookPrice = bookEntry.Price;
-                    runningTotal += bookEntry.Price * item.Quantity;
-                    cartItem.AvailableQuantity = bookEntry.AvailableQuantity;
-                }
-                if (item.ItemType == CartItemType.Offer)
-                {
-                    var offerEntry = offers.First(offer => offer.Id == item.ItemId);
-                    cartItem.Description = offerEntry.Description;
-                    cartItem.ImageUrl = offerEntry.ImageUrl;
-                    cartItem.OfferPricingDetails = CalculateOfferPricingDetails(offerEntry);
-                    runningTotal += cartItem.OfferPricingDetails.PriceAfterDiscount * item.Quantity;
-                    runningSavings += cartItem.OfferPricingDetails.SavingsAmount * item.Quantity;
-                    cartItem.AvailableQuantity = offerEntry.OfferItems.Min(oi => oi.Book.AvailableQuantity);
-                }
+                CartItem cartItem = new CartItem() { ItemId = item.ItemId, OrderQuantity = item.OrderQuantity  } ;
+
+                var bookEntry = books.First(book => book.Id == item.ItemId);
+                cartItem.Description = bookEntry.Description;
+                cartItem.ImageUrl = bookEntry.Images.Count > 0 ? bookEntry.Images.First().ImageUrl : string.Empty;
+                cartItem.Price = bookEntry.Price;
+                runningTotal += bookEntry.Price * item.OrderQuantity;
+                cartItem.AvailableQuantity = bookEntry.AvailableQuantity;
+
                 cart.Items.Add(cartItem);
             }
             cart.Total = runningTotal;
             cart.Savings = runningSavings;
             return Ok(cart);
-        }
-
-        private OfferPricingDetails CalculateOfferPricingDetails(Offer offer)
-        {
-            OfferPricingDetails opd = new OfferPricingDetails();
-
-            opd.PriceBeforeDiscount = offer.OfferItems.Sum(oi => oi.Book.Price);
-            opd.PriceAfterDiscount = opd.PriceBeforeDiscount - opd.PriceBeforeDiscount * offer.DiscountPercentage / 100;
-            opd.SavingsAmount = opd.PriceBeforeDiscount - opd.PriceAfterDiscount;
-            return opd;
         }
 
         // PUT api/<CartController>/5

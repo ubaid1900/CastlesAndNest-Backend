@@ -16,11 +16,11 @@ namespace Backend.Controllers
     [ApiController]
     public class FilesController : ControllerBase
     {
-        private readonly BooksAppDbContext _context;
-        private readonly ILogger<OffersController> _logger;
+        private readonly CastlesAndNestAppDbContext _context;
+        private readonly ILogger<FilesController> _logger;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public FilesController(BooksAppDbContext context, ILogger<OffersController> logger, IWebHostEnvironment webHostEnvironment)
+        public FilesController(CastlesAndNestAppDbContext context, ILogger<FilesController> logger, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             _logger = logger;
