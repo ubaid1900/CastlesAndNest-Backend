@@ -65,7 +65,6 @@ namespace Backend.Controllers
                 cartItem.ImageUrl = bookEntry.Images.Count > 0 ? bookEntry.Images.First().ImageUrl : string.Empty;
                 cartItem.Price = bookEntry.Price;
                 runningTotal += bookEntry.Price * item.OrderQuantity;
-                cartItem.AvailableQuantity = bookEntry.AvailableQuantity;
 
                 cart.Items.Add(cartItem);
             }

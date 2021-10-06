@@ -179,8 +179,17 @@ namespace Backend.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("AmazonLink")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("AvailableQuantity")
                         .HasColumnType("int");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Color")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -189,7 +198,23 @@ namespace Backend.Migrations
                     b.Property<bool>("Exclude")
                         .HasColumnType("bit");
 
-                    b.Property<string>("ISBN")
+                    b.Property<string>("FlipkartLink")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Height")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("HeightUnit")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Length")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("LengthUnit")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("OrderId")
@@ -198,16 +223,31 @@ namespace Backend.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("money");
 
-                    b.Property<int>("ReorderLevel")
+                    b.Property<int?>("ReorderLevel")
                         .HasColumnType("int");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
+                    b.Property<int>("SubCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Weight")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("WeightUnit")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Width")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("WidthUnit")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
                     b.HasIndex("OrderId");
+
+                    b.HasIndex("SubCategoryId");
 
                     b.ToTable("Products");
                 });
@@ -345,14 +385,14 @@ namespace Backend.Migrations
                         {
                             Id = "hafeezomair@gmail.com",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "57e0554a-f64c-44ff-a0ad-edcfa1452086",
+                            ConcurrencyStamp = "12b56217-0d4c-4a1b-9a58-d00a77f27c00",
                             Email = "hafeezomair@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "hafeezomair@gmail.com",
                             NormalizedUserName = "hafeezomair",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "09f491c6-c2d2-44fb-b0f5-fa66689aa44c",
+                            SecurityStamp = "8bd74b03-6194-47df-8e54-4465af93d838",
                             TwoFactorEnabled = false,
                             UserName = "hafeezomair"
                         },
@@ -360,14 +400,14 @@ namespace Backend.Migrations
                         {
                             Id = "mujahidkhan17@gmail.com",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "84eebfbb-1811-49c9-91f2-5919b45f5971",
+                            ConcurrencyStamp = "ee02f828-4dc4-4f2d-95ea-2b416413b7d9",
                             Email = "mujahidkhan17@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "mujahidkhan17@gmail.com",
                             NormalizedUserName = "mujahidkhan17",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "3d5b1286-6e52-4256-8115-e8373c84d223",
+                            SecurityStamp = "3a19f3af-4381-4817-a959-ca550234629a",
                             TwoFactorEnabled = false,
                             UserName = "mujahidkhan17"
                         },
@@ -375,14 +415,14 @@ namespace Backend.Migrations
                         {
                             Id = "ubaid1900@gmail.com",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9c2763b5-37a3-4d32-989d-ed99d68f95aa",
+                            ConcurrencyStamp = "4b96b880-887d-4d6e-9641-3525f1a33848",
                             Email = "ubaid1900@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ubaid1900@gmail.com",
                             NormalizedUserName = "ubaid1900",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "edebfe74-1acc-40ed-857b-2802b0f2aeeb",
+                            SecurityStamp = "daf186bf-6277-46c5-bd51-fde68dfec1b9",
                             TwoFactorEnabled = false,
                             UserName = "ubaid1900"
                         },
@@ -390,14 +430,14 @@ namespace Backend.Migrations
                         {
                             Id = "customerSome@gmail.com",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b3207bd5-afce-46ed-88eb-dffb2c7c8704",
+                            ConcurrencyStamp = "604bdf09-a8d4-4d31-8cd4-a5f7fc9b7ef7",
                             Email = "customerSome@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "customerSome@gmail.com",
                             NormalizedUserName = "customerSome",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "8b937427-d32b-4117-9ec8-3068f53cc24f",
+                            SecurityStamp = "fa16aa49-e39b-4e8f-bfba-313feffc7135",
                             TwoFactorEnabled = false,
                             UserName = "customerSome"
                         });
@@ -432,15 +472,15 @@ namespace Backend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "64e77316-2055-49de-b5df-e692c7e90f0b",
-                            ConcurrencyStamp = "48187855-1616-4e86-8f9c-abc2df078d80",
+                            Id = "a7575496-0e58-48d9-8fca-810d8bebc37c",
+                            ConcurrencyStamp = "74cd31fc-e32d-4e84-9c34-19095629bca0",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "a2eb44b7-486a-4514-92b1-aeb2ba5f1ffe",
-                            ConcurrencyStamp = "d54f5b27-3a50-4fe7-9c2c-50a5472ce8cb",
+                            Id = "cda2f522-ba48-419c-82f0-1dff431398c0",
+                            ConcurrencyStamp = "788a17fe-9c25-4cee-aa3b-6b585776af4f",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         });
@@ -534,22 +574,22 @@ namespace Backend.Migrations
                         new
                         {
                             UserId = "hafeezomair@gmail.com",
-                            RoleId = "64e77316-2055-49de-b5df-e692c7e90f0b"
+                            RoleId = "a7575496-0e58-48d9-8fca-810d8bebc37c"
                         },
                         new
                         {
                             UserId = "mujahidkhan17@gmail.com",
-                            RoleId = "64e77316-2055-49de-b5df-e692c7e90f0b"
+                            RoleId = "a7575496-0e58-48d9-8fca-810d8bebc37c"
                         },
                         new
                         {
                             UserId = "ubaid1900@gmail.com",
-                            RoleId = "64e77316-2055-49de-b5df-e692c7e90f0b"
+                            RoleId = "a7575496-0e58-48d9-8fca-810d8bebc37c"
                         },
                         new
                         {
                             UserId = "customerSome@gmail.com",
-                            RoleId = "a2eb44b7-486a-4514-92b1-aeb2ba5f1ffe"
+                            RoleId = "cda2f522-ba48-419c-82f0-1dff431398c0"
                         });
                 });
 
@@ -594,9 +634,21 @@ namespace Backend.Migrations
 
             modelBuilder.Entity("Backend.Models.Product", b =>
                 {
+                    b.HasOne("Backend.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Backend.Models.Order", null)
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId");
+
+                    b.HasOne("Backend.Models.SubCategory", "SubCategory")
+                        .WithMany()
+                        .HasForeignKey("SubCategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Backend.Models.ProductImages", b =>

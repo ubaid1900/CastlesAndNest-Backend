@@ -15,40 +15,29 @@ namespace Backend.Models
         public int Id { get; set; }
 
         [Required]
-        public string Title { get; set; }
+        public string Name { get; set; }
         [Required]
         public string Description { get; set; }
         public string Color { get; set; }
         [Column(TypeName = "decimal(18,2)")] public decimal Length { get; set; }
-        public Unit LengthUnit { get; set; }
+        public string LengthUnit { get; set; }
         [Column(TypeName = "decimal(18,2)")] public decimal Width { get; set; }
-        public Unit WidthUnit { get; set; }
+        public string WidthUnit { get; set; }
         [Column(TypeName = "decimal(18,2)")] public decimal Height { get; set; }
-        public Unit HeightUnit { get; set; }
+        public string HeightUnit { get; set; }
         [Column(TypeName = "decimal(18,2)")] public decimal Weight { get; set; }
-        public Unit WeightUnit { get; set; }
+        public string WeightUnit { get; set; }
         public string AmazonLink { get; set; }
         public string FlipkartLink { get; set; }
         [Column(TypeName = "money")] public decimal Price { get; set; }
         public int AvailableQuantity { get; set; }
         public ICollection<ProductImages> Images { get; set; }
         public bool Exclude { get; set; }
-        public int ReorderLevel { get; set; }
+        public int? ReorderLevel { get; set; }
         public int CategoryId { get; set; }
         public Category Category { get; set; }
         public int SubCategoryId { get; set; }
         public SubCategory SubCategory { get; set; }
-    }
-
-    public enum Unit
-    {
-        Meter,
-        Centimeter,
-        Millimeter,
-        Inch,
-        Feet,
-        Gram,
-        Kilogram
     }
 
     public class Category

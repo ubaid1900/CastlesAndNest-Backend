@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Backend.Migrations
 {
-    public partial class initial : Migration
+    public partial class initial1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -51,6 +51,19 @@ namespace Backend.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -202,6 +215,26 @@ namespace Backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SubCategories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CategoryId = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubCategories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SubCategories_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
                 {
@@ -251,22 +284,46 @@ namespace Backend.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
                     Description = table.Column<string>(nullable: false),
-                    ISBN = table.Column<string>(nullable: true),
+                    Color = table.Column<string>(nullable: true),
+                    Length = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    LengthUnit = table.Column<string>(nullable: true),
+                    Width = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    WidthUnit = table.Column<string>(nullable: true),
+                    Height = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    HeightUnit = table.Column<string>(nullable: true),
+                    Weight = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    WeightUnit = table.Column<string>(nullable: true),
+                    AmazonLink = table.Column<string>(nullable: true),
+                    FlipkartLink = table.Column<string>(nullable: true),
                     Price = table.Column<decimal>(type: "money", nullable: false),
                     AvailableQuantity = table.Column<int>(nullable: false),
                     Exclude = table.Column<bool>(nullable: false),
-                    ReorderLevel = table.Column<int>(nullable: false),
+                    ReorderLevel = table.Column<int>(nullable: true),
+                    CategoryId = table.Column<int>(nullable: false),
+                    SubCategoryId = table.Column<int>(nullable: false),
                     OrderId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Products", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Products_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Products_Orders_OrderId",
                         column: x => x.OrderId,
                         principalTable: "Orders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Products_SubCategories_SubCategoryId",
+                        column: x => x.SubCategoryId,
+                        principalTable: "SubCategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -297,8 +354,8 @@ namespace Backend.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "a67df26c-eb21-448b-81a3-cf9cad80154d", "41041b5e-b20c-45d1-960e-ec4742af3aea", "Administrator", "ADMINISTRATOR" },
-                    { "ecd9906b-866a-4373-8764-a59d8f58c1a0", "54257505-c37d-4e15-a663-34a09286bd59", "Customer", "CUSTOMER" }
+                    { "a7575496-0e58-48d9-8fca-810d8bebc37c", "74cd31fc-e32d-4e84-9c34-19095629bca0", "Administrator", "ADMINISTRATOR" },
+                    { "cda2f522-ba48-419c-82f0-1dff431398c0", "788a17fe-9c25-4cee-aa3b-6b585776af4f", "Customer", "CUSTOMER" }
                 });
 
             migrationBuilder.InsertData(
@@ -306,10 +363,10 @@ namespace Backend.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "AuthToken", "ConcurrencyStamp", "Email", "EmailConfirmed", "Firstname", "IdToken", "Lastname", "LockoutEnabled", "LockoutEnd", "Name", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "PhotoUrl", "Provider", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "hafeezomair@gmail.com", 0, null, "7153de5e-2292-4f9e-8446-ec63c69c88a1", "hafeezomair@gmail.com", true, null, null, null, false, null, null, "hafeezomair@gmail.com", "hafeezomair", null, null, false, null, null, "7e93b5a0-47ac-45a4-a52f-0f6db66da292", false, "hafeezomair" },
-                    { "mujahidkhan17@gmail.com", 0, null, "558a8add-cb9f-46ba-a420-227214f2ad6e", "mujahidkhan17@gmail.com", true, null, null, null, false, null, null, "mujahidkhan17@gmail.com", "mujahidkhan17", null, null, false, null, null, "140b5683-a2d7-4310-9aa6-4daf2c346970", false, "mujahidkhan17" },
-                    { "ubaid1900@gmail.com", 0, null, "b8a63749-1b58-4b38-96a1-b908d4b78840", "ubaid1900@gmail.com", true, null, null, null, false, null, null, "ubaid1900@gmail.com", "ubaid1900", null, null, false, null, null, "d8690f90-dcb4-45da-af42-308806b4edea", false, "ubaid1900" },
-                    { "customerSome@gmail.com", 0, null, "92f5d2b1-6b38-4b19-9259-d5a1cdc3a57e", "customerSome@gmail.com", true, null, null, null, false, null, null, "customerSome@gmail.com", "customerSome", null, null, false, null, null, "0b0c8f77-379b-4fbf-b76b-5c43b00cd66c", false, "customerSome" }
+                    { "hafeezomair@gmail.com", 0, null, "12b56217-0d4c-4a1b-9a58-d00a77f27c00", "hafeezomair@gmail.com", true, null, null, null, false, null, null, "hafeezomair@gmail.com", "hafeezomair", null, null, false, null, null, "8bd74b03-6194-47df-8e54-4465af93d838", false, "hafeezomair" },
+                    { "mujahidkhan17@gmail.com", 0, null, "ee02f828-4dc4-4f2d-95ea-2b416413b7d9", "mujahidkhan17@gmail.com", true, null, null, null, false, null, null, "mujahidkhan17@gmail.com", "mujahidkhan17", null, null, false, null, null, "3a19f3af-4381-4817-a959-ca550234629a", false, "mujahidkhan17" },
+                    { "ubaid1900@gmail.com", 0, null, "4b96b880-887d-4d6e-9641-3525f1a33848", "ubaid1900@gmail.com", true, null, null, null, false, null, null, "ubaid1900@gmail.com", "ubaid1900", null, null, false, null, null, "daf186bf-6277-46c5-bd51-fde68dfec1b9", false, "ubaid1900" },
+                    { "customerSome@gmail.com", 0, null, "604bdf09-a8d4-4d31-8cd4-a5f7fc9b7ef7", "customerSome@gmail.com", true, null, null, null, false, null, null, "customerSome@gmail.com", "customerSome", null, null, false, null, null, "fa16aa49-e39b-4e8f-bfba-313feffc7135", false, "customerSome" }
                 });
 
             migrationBuilder.InsertData(
@@ -317,10 +374,10 @@ namespace Backend.Migrations
                 columns: new[] { "UserId", "RoleId" },
                 values: new object[,]
                 {
-                    { "hafeezomair@gmail.com", "a67df26c-eb21-448b-81a3-cf9cad80154d" },
-                    { "mujahidkhan17@gmail.com", "a67df26c-eb21-448b-81a3-cf9cad80154d" },
-                    { "ubaid1900@gmail.com", "a67df26c-eb21-448b-81a3-cf9cad80154d" },
-                    { "customerSome@gmail.com", "ecd9906b-866a-4373-8764-a59d8f58c1a0" }
+                    { "hafeezomair@gmail.com", "a7575496-0e58-48d9-8fca-810d8bebc37c" },
+                    { "mujahidkhan17@gmail.com", "a7575496-0e58-48d9-8fca-810d8bebc37c" },
+                    { "ubaid1900@gmail.com", "a7575496-0e58-48d9-8fca-810d8bebc37c" },
+                    { "customerSome@gmail.com", "cda2f522-ba48-419c-82f0-1dff431398c0" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -383,9 +440,24 @@ namespace Backend.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Products_CategoryId",
+                table: "Products",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Products_OrderId",
                 table: "Products",
                 column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_SubCategoryId",
+                table: "Products",
+                column: "SubCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubCategories_CategoryId",
+                table: "SubCategories",
+                column: "CategoryId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -421,10 +493,16 @@ namespace Backend.Migrations
                 name: "Orders");
 
             migrationBuilder.DropTable(
+                name: "SubCategories");
+
+            migrationBuilder.DropTable(
                 name: "Payment");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
         }
     }
 }

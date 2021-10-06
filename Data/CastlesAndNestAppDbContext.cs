@@ -20,12 +20,17 @@ namespace Backend.Data
         {
         }
 
-        //protected override void OnModelCreating(ModelBuilder builder)
-        //{
-        //    base.OnModelCreating(builder);
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
 
-        //    builder.Seed();
-        //}
+            builder.Seed();
+            builder.Entity<Product>()
+                .HasOne(p => p.SubCategory)
+                .WithMany()
+                .HasForeignKey(p => p.SubCategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
 
         public DbSet<Order> Orders { get; set; }
         public DbSet<Product> Products { get; set; }
