@@ -111,7 +111,7 @@ namespace Backend
             //    dataContext.Entry(item).State = EntityState.Deleted;
             //}
             //dataContext.SaveChanges();
-            dataContext.Database.EnsureDeleted();
+            //dataContext.Database.EnsureDeleted();
             dataContext.Database.Migrate();
             var allowedOrigins = Configuration["AllowOrigins"];
             var arrAllowedOrigins = allowedOrigins.Split(",", StringSplitOptions.RemoveEmptyEntries);
