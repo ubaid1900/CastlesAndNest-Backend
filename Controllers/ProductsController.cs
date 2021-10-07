@@ -47,6 +47,13 @@ namespace Backend.Controllers
             return product;
         }
 
+        [HttpGet]
+        [Route("quicksearch/{query}")]
+        public async Task<ActionResult<IEnumerable<Product>>> Search(string query)
+        {
+            return await _context.Products.Where(book => book.Name.ToLower().Contains(query.ToLower()))
+                .ToListAsync();
+        }
         // PUT: api/Products/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
