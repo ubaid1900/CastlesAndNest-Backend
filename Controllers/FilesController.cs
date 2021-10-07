@@ -32,18 +32,19 @@ namespace Backend.Controllers
             return Ok("get");
         }
         [HttpPost]
-        public async Task<ActionResult<string>> Post()
+        public async Task<ActionResult<IEnumerable<string>>> Post()
         {
             var files = HttpContext.Request.Form.Files;
             if (files.Count == 0)
             {
                 return BadRequest("No file was sent!");
             }
-            var fileToUpload = HttpContext.Request.Form.Files[0];
-            string uniqueFileName = null;
+            var filesToUpload = HttpContext.Request.Form.Files;
+            List<string> uniqueFileNames = null;
 
-            if (fileToUpload != null)
+            if (filesToUpload != null)
             {
+                uniqueFileNames = new List<string>();
                 if (_webHostEnvironment.WebRootPath == null)
                 {
                     var wrt = Directory.CreateDirectory(Path.Combine(_webHostEnvironment.ContentRootPath, "wwwroot"));
@@ -54,16 +55,16 @@ namespace Backend.Controllers
                     _webHostEnvironment.WebRootPath = Path.Combine(_webHostEnvironment.ContentRootPath, "wwwroot");
                 }
                 string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
-                uniqueFileName = Guid.NewGuid().ToString() + "_" + fileToUpload.FileName;
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                using var fileStream = new FileStream(filePath, FileMode.Create);
-                await fileToUpload.CopyToAsync(fileStream);
-            }
-            if (string.IsNullOrWhiteSpace(uniqueFileName))
-            {
-                return BadRequest("Form file was not sent.");
-            }
-            return Ok(uniqueFileName);
+                foreach (var fileToUpload in filesToUpload)
+                {
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + fileToUpload.FileName;
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    using var fileStream = new FileStream(filePath, FileMode.Create);
+                    await fileToUpload.CopyToAsync(fileStream);
+                    uniqueFileNames.Add(uniqueFileName);
+                }
+            }            
+            return Ok(uniqueFileNames);
         }
 
         [HttpDelete("{filename}")]
