@@ -34,6 +34,7 @@ namespace Backend.Controllers
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
             var product = await _context.Products
+                .Include(p => p.Images)
                 .Include(p => p.Category)
                 .Include(p => p.SubCategory)
                 .FirstOrDefaultAsync(p => p.Id == id);
@@ -58,6 +59,29 @@ namespace Backend.Controllers
                 return BadRequest();
             }
 
+            var images = _context.ProductImages.Where(oi => oi.ProductId == id);
+            var existingProductIds = images.Select(oi => oi.Id).ToList();
+            var incomingProductIds = product.Images?.Select(oi => oi.Id).ToList();
+            var newProductIds = incomingProductIds?.Except(existingProductIds);
+            var toDeleteProductIds = incomingProductIds == null ? existingProductIds : existingProductIds.Except(incomingProductIds);
+
+            foreach (ProductImages child in images)
+            {
+                if (toDeleteProductIds.Contains(child.Id))
+                {
+                    _context.Entry(child).State = EntityState.Deleted;
+                }
+            }
+            if (product.Images != null)
+            {
+                foreach (var child in product.Images)
+                {
+                    if (newProductIds.Contains(child.Id))
+                    {
+                        _context.Entry(child).State = EntityState.Added;
+                    }
+                }
+            }
             _context.Entry(product).State = EntityState.Modified;
 
             try

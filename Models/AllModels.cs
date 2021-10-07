@@ -57,7 +57,7 @@ namespace Backend.Models
     public class ProductImages
     {
         public int Id { get; set; }
-        public int BookId { get; set; }
+        public int ProductId { get; set; }
         public string ImageUrl { get; set; }
     }
 
