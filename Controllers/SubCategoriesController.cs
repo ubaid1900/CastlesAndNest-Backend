@@ -48,7 +48,7 @@ namespace Backend.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCategory(int id, SubCategory subCategory)
+        public async Task<IActionResult> PutSubCategory(int id, SubCategory subCategory)
         {
             if (id != subCategory.Id)
             {
