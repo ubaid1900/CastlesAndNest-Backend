@@ -32,6 +32,7 @@ namespace Backend.Models
         [Column(TypeName = "money")] public decimal Price { get; set; }
         public int AvailableQuantity { get; set; }
         public ICollection<ProductImages> Images { get; set; }
+        public DateTime DateAvailable { get; set; }
         public bool Exclude { get; set; }
         public int? ReorderLevel { get; set; }
         public int CategoryId { get; set; }
