@@ -24,8 +24,12 @@ namespace Backend.Controllers
 
         // GET: api/Categories
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<SubCategory>>> GetSubCategories()
+        public async Task<ActionResult<IEnumerable<SubCategory>>> GetSubCategories([FromQuery] int catId)
         {
+            if (catId != 0)
+            {
+                return await _context.SubCategories.Include(sc => sc.Category).Where(sc=>sc.CategoryId == catId).ToListAsync();
+            }
             return await _context.SubCategories.Include(sc => sc.Category).ToListAsync();
         }
 
