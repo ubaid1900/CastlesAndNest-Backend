@@ -24,11 +24,21 @@ namespace Backend.Controllers
 
         // GET: api/Products
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<Product>>> GetProducts([FromQuery] int subCatId, [FromQuery] int limit)
         {
-            return await _context.Products
-                .Include(p => p.Images)
-                .ToListAsync();
+            var prds = _context.Products
+                .Include(p => p.Images).Where(prd => prd.Id == prd.Id);
+
+            if (subCatId != 0)
+            {
+                prds = prds.Where(prd => prd.SubCategoryId == subCatId);
+            }
+            if (limit != 0)
+            {
+                prds = prds.Take(limit);
+            }
+
+            return await prds.ToListAsync();
         }
 
         // GET: api/Products/5
