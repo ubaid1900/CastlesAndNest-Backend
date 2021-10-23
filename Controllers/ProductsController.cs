@@ -35,10 +35,10 @@ namespace Backend.Controllers
             }
             if (limit != 0)
             {
-                prds = prds.Take(limit);
+                prds = prds.OrderByDescending(prd=> prd.DateAvailable).Take(limit);
             }
 
-            return await prds.ToListAsync();
+            return await prds.OrderByDescending(prd => prd.DateAvailable).ToListAsync();
         }
 
         // GET: api/Products/5
