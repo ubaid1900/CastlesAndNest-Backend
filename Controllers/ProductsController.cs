@@ -24,8 +24,13 @@ namespace Backend.Controllers
 
         // GET: api/Products
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts([FromQuery] int catId, [FromQuery] int subCatId, [FromQuery] int limit)
+        public async Task<ActionResult<IEnumerable<Product>>> GetProducts(
+            [FromQuery] int relatedId, [FromQuery] int catId, [FromQuery] int subCatId, [FromQuery] int limit)
         {
+            if (relatedId > 0)
+            {
+                return await GetRelatedProducts(relatedId, limit);
+            }
             var prds = _context.Products
                 .Include(p => p.Images).Where(prd => prd.Id == prd.Id);
 
@@ -39,7 +44,7 @@ namespace Backend.Controllers
             }
             if (limit != 0)
             {
-                prds = prds.OrderByDescending(prd=> prd.DateAvailable).Take(limit);
+                prds = prds.OrderByDescending(prd => prd.DateAvailable).Take(limit);
             }
 
             return await prds.OrderByDescending(prd => prd.DateAvailable).ToListAsync();
@@ -61,6 +66,46 @@ namespace Backend.Controllers
             }
 
             return product;
+        }
+
+        private async Task<ActionResult<IEnumerable<Product>>> GetRelatedProducts(int id, int limit)
+        {
+            var products = await _context.Products
+                .Where(p => p.Id == id)
+                .Select(p => new { p.Id, p.CategoryId, p.SubCategoryId }).ToListAsync();
+            var product = products.FirstOrDefault();
+
+            if (product == null)
+            {
+                return Ok();
+            }
+            var relatedProducts = _context.Products
+                .Include(p => p.Images)
+                .Where(p => p.Id != id && p.SubCategoryId == product.SubCategoryId)
+                .OrderByDescending(p => p.DateAvailable)
+                .Take(limit);
+            if (relatedProducts.Count() < limit)
+            {
+                var relPids = relatedProducts.Select(p => p.Id);
+                var catRelatedProducts = _context.Products
+                    .Include(p => p.Images)
+                    .Where(p => p.Id != id && !relPids.Contains(p.Id) && p.CategoryId == product.CategoryId)
+                    .OrderByDescending(p => p.DateAvailable)
+                    .Take(limit - relatedProducts.Count());
+                relatedProducts = relatedProducts.Union(catRelatedProducts);
+            }
+            if (relatedProducts.Count() < limit)
+            {
+                var relPids = relatedProducts.Select(p => p.Id);
+                var catRelatedProducts = _context.Products
+                    .Include(p => p.Images)
+                    .Where(p => p.Id != id && !relPids.Contains(p.Id))
+                    .OrderByDescending(p => p.DateAvailable)
+                    .Take(limit - relatedProducts.Count());
+                relatedProducts = relatedProducts.Union(catRelatedProducts);
+            }
+
+            return await relatedProducts.ToListAsync();
         }
 
         [HttpGet]

@@ -30,6 +30,8 @@ namespace Backend.Data
                 .WithMany()
                 .HasForeignKey(p => p.SubCategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Product>()
+                .HasIndex(p => p.DateAvailable);
         }
 
         public DbSet<Order> Orders { get; set; }
