@@ -106,6 +106,12 @@ namespace Backend.Controllers
             return category;
         }
 
+        [Route("NameExists/{id}/{name}")]
+        public async Task<ActionResult<bool>> NameExists(int id, string name)
+        {
+            return Ok(await _context.Categories.AnyAsync(c => c.Id != id && c.Name.ToLower() == name.ToLower()));
+        }
+
         private bool CategoryExists(int id)
         {
             return _context.Categories.Any(e => e.Id == id);

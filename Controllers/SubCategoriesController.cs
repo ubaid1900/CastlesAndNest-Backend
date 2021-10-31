@@ -110,6 +110,12 @@ namespace Backend.Controllers
             return subCategory;
         }
 
+        [Route("NameExists/{id}/{categoryId}/{name}")]
+        public async Task<ActionResult<bool>> NameExists(int id, int categoryId, string name)
+        {
+            return Ok(await _context.SubCategories.AnyAsync(c => c.Id != id && c.CategoryId == categoryId && c.Name.ToLower() == name.ToLower()));
+        }
+
         private bool SubCategoryExists(int id)
         {
             return _context.SubCategories.Any(e => e.Id == id);

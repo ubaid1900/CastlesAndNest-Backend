@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +24,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -42,6 +44,13 @@ namespace Backend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Fastest);
+            services.AddResponseCompression(options =>
+            {
+                options.Providers.Add<GzipCompressionProvider>();
+                options.EnableForHttps = true;
+            });
+
             var allowedOrigins = Configuration["AllowOrigins"];
             var arrAllowedOrigins = allowedOrigins.Split(",", StringSplitOptions.RemoveEmptyEntries);
 
@@ -93,7 +102,8 @@ namespace Backend
             });
 
             services.AddScoped<JwtHandler>();
-            services.AddControllers().AddNewtonsoftJson(options => {
+            services.AddControllers().AddNewtonsoftJson(options =>
+            {
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
             var companyInfo = Configuration
@@ -109,6 +119,7 @@ namespace Backend
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, CastlesAndNestAppDbContext dataContext)
         {
+            app.UseResponseCompression();
             //foreach (var item in dataContext.Orders)
             //{
             //    dataContext.Entry(item).State = EntityState.Deleted;
@@ -120,8 +131,16 @@ namespace Backend
             var arrAllowedOrigins = allowedOrigins.Split(",", StringSplitOptions.RemoveEmptyEntries);
             app.UseCors(options => options.WithOrigins(arrAllowedOrigins).AllowAnyHeader().AllowAnyMethod());
 
-            app.UseStaticFiles(new StaticFileOptions()
+            // 1 year
+            string cacheMaxAge = (31536000).ToString();
+            app.UseStaticFiles(new StaticFileOptions
             {
+                OnPrepareResponse = ctx =>
+                {
+                    // using Microsoft.AspNetCore.Http;
+                    ctx.Context.Response.Headers.Append(
+                         "Cache-Control", $"public, max-age={cacheMaxAge}");
+                },
                 RequestPath = new PathString("/api")
             });
 

@@ -44,10 +44,10 @@ namespace Backend.Controllers
             }
             if (limit != 0)
             {
-                prds = prds.OrderByDescending(prd => prd.DateAvailable).Take(limit);
+                prds = prds.OrderByDescending(p => p.Featured).ThenByDescending(prd => prd.DateAvailable).Take(limit);
             }
 
-            return await prds.OrderByDescending(prd => prd.DateAvailable).ToListAsync();
+            return await prds.OrderByDescending(p => p.Featured).ThenByDescending(prd => prd.DateAvailable).ToListAsync();
         }
 
         // GET: api/Products/5
@@ -82,7 +82,7 @@ namespace Backend.Controllers
             var relatedProducts = _context.Products
                 .Include(p => p.Images)
                 .Where(p => p.Id != id && p.SubCategoryId == product.SubCategoryId)
-                .OrderByDescending(p => p.DateAvailable)
+                .OrderByDescending(p => p.Featured).ThenByDescending(p => p.DateAvailable)
                 .Take(limit);
             if (relatedProducts.Count() < limit)
             {
@@ -90,7 +90,7 @@ namespace Backend.Controllers
                 var catRelatedProducts = _context.Products
                     .Include(p => p.Images)
                     .Where(p => p.Id != id && !relPids.Contains(p.Id) && p.CategoryId == product.CategoryId)
-                    .OrderByDescending(p => p.DateAvailable)
+                    .OrderByDescending(p => p.Featured).ThenByDescending(p => p.DateAvailable)
                     .Take(limit - relatedProducts.Count());
                 relatedProducts = relatedProducts.Union(catRelatedProducts);
             }
@@ -100,7 +100,7 @@ namespace Backend.Controllers
                 var catRelatedProducts = _context.Products
                     .Include(p => p.Images)
                     .Where(p => p.Id != id && !relPids.Contains(p.Id))
-                    .OrderByDescending(p => p.DateAvailable)
+                    .OrderByDescending(p => p.Featured).ThenByDescending(p => p.DateAvailable)
                     .Take(limit - relatedProducts.Count());
                 relatedProducts = relatedProducts.Union(catRelatedProducts);
             }
@@ -113,7 +113,7 @@ namespace Backend.Controllers
         public async Task<ActionResult<IEnumerable<Product>>> Search(string query)
         {
             return await _context.Products.Where(book => book.Name.ToLower().Contains(query.ToLower()))
-                .ToListAsync();
+                .OrderByDescending(p => p.Featured).ThenByDescending(p => p.DateAvailable).ToListAsync();
         }
         // PUT: api/Products/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for

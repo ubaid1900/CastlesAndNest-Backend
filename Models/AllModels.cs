@@ -34,6 +34,7 @@ namespace Backend.Models
         public ICollection<ProductImages> Images { get; set; }
         public DateTime DateAvailable { get; set; }
         public bool Exclude { get; set; }
+        public bool Featured { get; set; }
         public int? ReorderLevel { get; set; }
         public int CategoryId { get; set; }
         public Category Category { get; set; }
