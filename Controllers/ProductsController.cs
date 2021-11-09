@@ -32,7 +32,7 @@ namespace Backend.Controllers
                 return await GetRelatedProducts(relatedId, limit);
             }
             var prds = _context.Products
-                .Include(p => p.Images).Where(prd => prd.Id == prd.Id);
+                .Where(prd => prd.Id == prd.Id);
 
             if (catId != 0)
             {
@@ -44,10 +44,22 @@ namespace Backend.Controllers
             }
             if (limit != 0)
             {
-                prds = prds.OrderByDescending(p => p.Featured).ThenByDescending(prd => prd.DateAvailable).Take(limit);
+                prds = prds
+                    .OrderByDescending(p => p.Featured).ThenByDescending(prd => prd.DateAvailable)
+                    .Take(limit);
             }
 
-            return await prds.OrderByDescending(p => p.Featured).ThenByDescending(prd => prd.DateAvailable).ToListAsync();
+            return await prds.OrderByDescending(p => p.Featured).ThenByDescending(prd => prd.DateAvailable)
+                .Select(prd => new Product()
+                {
+                    Images = new ProductImages[] { prd.Images.OrderBy(pi => pi.Id).FirstOrDefault() },
+                    Id = prd.Id,
+                    Price = prd.Price,
+                    Name = prd.Name,
+                    DateAvailable = prd.DateAvailable,
+                    Featured = prd.Featured,
+                    Exclude = prd.Exclude
+                }).ToListAsync();
         }
 
         // GET: api/Products/5
@@ -80,7 +92,6 @@ namespace Backend.Controllers
                 return Ok();
             }
             var relatedProducts = _context.Products
-                .Include(p => p.Images)
                 .Where(p => p.Id != id && p.SubCategoryId == product.SubCategoryId)
                 .OrderByDescending(p => p.Featured).ThenByDescending(p => p.DateAvailable)
                 .Take(limit);
@@ -88,7 +99,6 @@ namespace Backend.Controllers
             {
                 var relPids = relatedProducts.Select(p => p.Id);
                 var catRelatedProducts = _context.Products
-                    .Include(p => p.Images)
                     .Where(p => p.Id != id && !relPids.Contains(p.Id) && p.CategoryId == product.CategoryId)
                     .OrderByDescending(p => p.Featured).ThenByDescending(p => p.DateAvailable)
                     .Take(limit - relatedProducts.Count());
@@ -98,14 +108,22 @@ namespace Backend.Controllers
             {
                 var relPids = relatedProducts.Select(p => p.Id);
                 var catRelatedProducts = _context.Products
-                    .Include(p => p.Images)
                     .Where(p => p.Id != id && !relPids.Contains(p.Id))
                     .OrderByDescending(p => p.Featured).ThenByDescending(p => p.DateAvailable)
                     .Take(limit - relatedProducts.Count());
                 relatedProducts = relatedProducts.Union(catRelatedProducts);
             }
 
-            return await relatedProducts.ToListAsync();
+            return await relatedProducts.Select(prd => new Product()
+            {
+                Images = new ProductImages[] { prd.Images.OrderBy(pi => pi.Id).FirstOrDefault() },
+                Id = prd.Id,
+                Price = prd.Price,
+                Name = prd.Name,
+                DateAvailable = prd.DateAvailable,
+                Featured = prd.Featured,
+                Exclude = prd.Exclude
+            }).ToListAsync();
         }
 
         [HttpGet]
