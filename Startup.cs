@@ -135,12 +135,16 @@ namespace Backend
             string cacheMaxAge = (31536000).ToString();
             app.UseStaticFiles(new StaticFileOptions
             {
-                OnPrepareResponse = ctx =>
-                {
-                    // using Microsoft.AspNetCore.Http;
-                    ctx.Context.Response.Headers.Append(
-                         "Cache-Control", $"public, max-age={cacheMaxAge}");
-                },
+                // NOTE: When this is done, the first image was loading fine in product detail,
+                // all other images were blank, even the alt was not showing. Probable reason is 
+                // that the first image might be successfully cached due to it being shown on the home page.
+
+                //OnPrepareResponse = ctx =>
+                //{
+                //    // using Microsoft.AspNetCore.Http;
+                //    ctx.Context.Response.Headers.Append(
+                //         "Cache-Control", $"public, max-age={cacheMaxAge}");
+                //},
                 RequestPath = new PathString("/api")
             });
 
