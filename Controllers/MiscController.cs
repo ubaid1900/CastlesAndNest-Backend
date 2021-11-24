@@ -1,8 +1,8 @@
-﻿using Backend.Models;
-using Backend.Utilities;
+﻿using Backend.Data;
+using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,11 +15,13 @@ namespace Backend.Controllers
     [ApiController]
     public class MiscController : ControllerBase
     {
-        private readonly IConfiguration configuration;
+        private readonly IConfiguration _configuration;
+        private readonly CastlesAndNestAppDbContext _context;
 
-        public MiscController(IConfiguration configuration)
+        public MiscController(IConfiguration configuration, CastlesAndNestAppDbContext context)
         {
-            this.configuration = configuration;
+            _configuration = configuration;
+            _context = context;
         }
         // GET: api/<MiscController>
         [HttpGet]
@@ -27,8 +29,18 @@ namespace Backend.Controllers
         [ResponseCache(Duration = 86400)]
         public CompanyInformation GetCompanyInfo()
         {
-            var companyInfo = configuration.GetSection("CompanyInformation").Get<CompanyInformation>();
-            return companyInfo;            
+            var companyInfo = _configuration.GetSection("CompanyInformation").Get<CompanyInformation>();
+            return companyInfo;
+        }
+        [HttpGet]
+        [Route("allimages")]
+        public async Task<ActionResult<IEnumerable<string>>> GetAllImagesAsync()
+        {
+            var temp = _context.ProductImages.Select(pi => pi.ImageUrl)
+                .Union(_context.Categories.Select(t => t.ImageUrl))
+                .Union(_context.SubCategories.Select(t => t.ImageUrl));
+
+            return await temp.ToListAsync();
         }
     }
 }
