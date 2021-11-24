@@ -4,14 +4,16 @@ using Backend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Backend.Migrations
 {
     [DbContext(typeof(CastlesAndNestAppDbContext))]
-    partial class CastlesAndNestAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211124174218_fix-hasoneuser")]
+    partial class fixhasoneuser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -396,29 +398,44 @@ namespace Backend.Migrations
                         {
                             Id = "hafeezomair@gmail.com",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b5e887b5-91f6-4092-861e-ff19bcda3df4",
+                            ConcurrencyStamp = "8db2e2b9-7157-4d68-ace8-40f9c689a6f5",
                             Email = "hafeezomair@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "hafeezomair@gmail.com",
                             NormalizedUserName = "hafeezomair",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "f8213d82-a746-4cac-989a-67550f286305",
+                            SecurityStamp = "d3504a13-3496-422b-b826-dcd166f9358b",
                             TwoFactorEnabled = false,
                             UserName = "hafeezomair"
                         },
                         new
                         {
+                            Id = "hashonecreations1@gmail.com",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "5ae07637-b861-4fe3-8860-d5870485a543",
+                            Email = "hashonecreations1@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "hashonecreations1@gmail.com",
+                            NormalizedUserName = "hashonecreations1",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "85951e64-eb41-41ee-8c8c-aa37dc1dbe67",
+                            TwoFactorEnabled = false,
+                            UserName = "hashonecreations1"
+                        },
+                        new
+                        {
                             Id = "ubaid1900@gmail.com",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "1f95c349-726f-4719-b422-d2ca42dc1a64",
+                            ConcurrencyStamp = "fdd8f32b-3c6a-4d33-8db7-bac0f2d009fd",
                             Email = "ubaid1900@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ubaid1900@gmail.com",
                             NormalizedUserName = "ubaid1900",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "c7a85dee-b9bb-41d2-a8b3-86a2abeb5884",
+                            SecurityStamp = "bd3346a1-8a0c-47f8-bde0-ebdd8065296c",
                             TwoFactorEnabled = false,
                             UserName = "ubaid1900"
                         },
@@ -426,31 +443,16 @@ namespace Backend.Migrations
                         {
                             Id = "customerSome@gmail.com",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b7a2be20-44b3-4b39-af82-8b95d1f754c9",
+                            ConcurrencyStamp = "d16658e1-f145-4867-9528-f9a7186e8125",
                             Email = "customerSome@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "customerSome@gmail.com",
                             NormalizedUserName = "customerSome",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "53a2f77a-21c2-47fe-90b0-4e0f13be9be4",
+                            SecurityStamp = "c98a131f-653b-48f1-8d09-abae5c8d711e",
                             TwoFactorEnabled = false,
                             UserName = "customerSome"
-                        },
-                        new
-                        {
-                            Id = "hashonecreations1@gmail.com",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "17b59af3-45ee-474d-b76a-46e6ba17d84b",
-                            Email = "hashonecreations1@gmail.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "hashonecreations1@gmail.com",
-                            NormalizedUserName = "hashonecreations1",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "3227384f-b8ec-4fd4-8487-cd470fe425be",
-                            TwoFactorEnabled = false,
-                            UserName = "hashonecreations1"
                         });
                 });
 
@@ -483,15 +485,15 @@ namespace Backend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "ac508727-888c-4150-9039-9c1419743a5e",
-                            ConcurrencyStamp = "2109a47a-1d9e-4f81-984a-9444641a862f",
+                            Id = "de9bf631-7f4d-4afa-aa34-4d2318f8a00a",
+                            ConcurrencyStamp = "9d0f384e-45f9-4ed2-a221-7626fc141c05",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "764fd50f-7e1e-4794-b977-a92bc731906c",
-                            ConcurrencyStamp = "59fb8580-62ee-4d05-a886-6e8016d85da8",
+                            Id = "b68514cc-8e74-4b1e-976d-0e5d8297f4ce",
+                            ConcurrencyStamp = "d31d9279-8471-4c1e-96b3-3bf700099115",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         });
@@ -585,22 +587,22 @@ namespace Backend.Migrations
                         new
                         {
                             UserId = "hafeezomair@gmail.com",
-                            RoleId = "ac508727-888c-4150-9039-9c1419743a5e"
-                        },
-                        new
-                        {
-                            UserId = "ubaid1900@gmail.com",
-                            RoleId = "ac508727-888c-4150-9039-9c1419743a5e"
-                        },
-                        new
-                        {
-                            UserId = "customerSome@gmail.com",
-                            RoleId = "764fd50f-7e1e-4794-b977-a92bc731906c"
+                            RoleId = "de9bf631-7f4d-4afa-aa34-4d2318f8a00a"
                         },
                         new
                         {
                             UserId = "hashonecreations1@gmail.com",
-                            RoleId = "ac508727-888c-4150-9039-9c1419743a5e"
+                            RoleId = "de9bf631-7f4d-4afa-aa34-4d2318f8a00a"
+                        },
+                        new
+                        {
+                            UserId = "ubaid1900@gmail.com",
+                            RoleId = "de9bf631-7f4d-4afa-aa34-4d2318f8a00a"
+                        },
+                        new
+                        {
+                            UserId = "customerSome@gmail.com",
+                            RoleId = "b68514cc-8e74-4b1e-976d-0e5d8297f4ce"
                         });
                 });
 

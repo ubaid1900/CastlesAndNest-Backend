@@ -120,6 +120,18 @@ namespace Backend
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, CastlesAndNestAppDbContext dataContext)
         {
             app.UseResponseCompression();
+            //var hash = dataContext.Users.Find("ubaid1900@gmail.com");
+            //if (hash != null)
+            //{
+            //    var hashRole = dataContext.UserRoles.FirstOrDefault(ur => ur.UserId == hash.Email);
+            //    if (hashRole != null)
+            //    {
+            //        dataContext.UserRoles.Remove(hashRole);
+            //        dataContext.SaveChanges();
+            //    }
+            //    dataContext.Users.Remove(hash);
+            //    dataContext.SaveChanges();
+            //}
             //foreach (var item in dataContext.Orders)
             //{
             //    dataContext.Entry(item).State = EntityState.Deleted;

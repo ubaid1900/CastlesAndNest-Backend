@@ -33,6 +33,14 @@
     <Compile Remove="Migrations\20210814064441_orders.Designer.cs" />
     <Compile Remove="Migrations\20211003121508_product.cs" />
     <Compile Remove="Migrations\20211003121508_product.Designer.cs" />
+    <Compile Remove="Migrations\20211124174727_exclude_hashone.cs" />
+    <Compile Remove="Migrations\20211124174727_exclude_hashone.Designer.cs" />
+    <Compile Remove="Migrations\20211124175908_reinclude.cs" />
+    <Compile Remove="Migrations\20211124175908_reinclude.Designer.cs" />
+    <Compile Remove="Migrations\20211124180828_exclude_hashone.cs" />
+    <Compile Remove="Migrations\20211124180828_exclude_hashone.Designer.cs" />
+    <Compile Remove="Migrations\20211124184827_readd.cs" />
+    <Compile Remove="Migrations\20211124184827_readd.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

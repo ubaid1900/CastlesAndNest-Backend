@@ -4,14 +4,16 @@ using Backend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Backend.Migrations
 {
     [DbContext(typeof(CastlesAndNestAppDbContext))]
-    partial class CastlesAndNestAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211124181644_clearall")]
+    partial class clearall
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -390,68 +392,6 @@ namespace Backend.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "hafeezomair@gmail.com",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "b5e887b5-91f6-4092-861e-ff19bcda3df4",
-                            Email = "hafeezomair@gmail.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "hafeezomair@gmail.com",
-                            NormalizedUserName = "hafeezomair",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "f8213d82-a746-4cac-989a-67550f286305",
-                            TwoFactorEnabled = false,
-                            UserName = "hafeezomair"
-                        },
-                        new
-                        {
-                            Id = "ubaid1900@gmail.com",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "1f95c349-726f-4719-b422-d2ca42dc1a64",
-                            Email = "ubaid1900@gmail.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ubaid1900@gmail.com",
-                            NormalizedUserName = "ubaid1900",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "c7a85dee-b9bb-41d2-a8b3-86a2abeb5884",
-                            TwoFactorEnabled = false,
-                            UserName = "ubaid1900"
-                        },
-                        new
-                        {
-                            Id = "customerSome@gmail.com",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "b7a2be20-44b3-4b39-af82-8b95d1f754c9",
-                            Email = "customerSome@gmail.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "customerSome@gmail.com",
-                            NormalizedUserName = "customerSome",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "53a2f77a-21c2-47fe-90b0-4e0f13be9be4",
-                            TwoFactorEnabled = false,
-                            UserName = "customerSome"
-                        },
-                        new
-                        {
-                            Id = "hashonecreations1@gmail.com",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "17b59af3-45ee-474d-b76a-46e6ba17d84b",
-                            Email = "hashonecreations1@gmail.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "hashonecreations1@gmail.com",
-                            NormalizedUserName = "hashonecreations1",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "3227384f-b8ec-4fd4-8487-cd470fe425be",
-                            TwoFactorEnabled = false,
-                            UserName = "hashonecreations1"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -479,22 +419,6 @@ namespace Backend.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "ac508727-888c-4150-9039-9c1419743a5e",
-                            ConcurrencyStamp = "2109a47a-1d9e-4f81-984a-9444641a862f",
-                            Name = "Administrator",
-                            NormalizedName = "ADMINISTRATOR"
-                        },
-                        new
-                        {
-                            Id = "764fd50f-7e1e-4794-b977-a92bc731906c",
-                            ConcurrencyStamp = "59fb8580-62ee-4d05-a886-6e8016d85da8",
-                            Name = "Customer",
-                            NormalizedName = "CUSTOMER"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -580,28 +504,6 @@ namespace Backend.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "hafeezomair@gmail.com",
-                            RoleId = "ac508727-888c-4150-9039-9c1419743a5e"
-                        },
-                        new
-                        {
-                            UserId = "ubaid1900@gmail.com",
-                            RoleId = "ac508727-888c-4150-9039-9c1419743a5e"
-                        },
-                        new
-                        {
-                            UserId = "customerSome@gmail.com",
-                            RoleId = "764fd50f-7e1e-4794-b977-a92bc731906c"
-                        },
-                        new
-                        {
-                            UserId = "hashonecreations1@gmail.com",
-                            RoleId = "ac508727-888c-4150-9039-9c1419743a5e"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
