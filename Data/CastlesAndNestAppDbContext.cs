@@ -31,12 +31,12 @@ namespace Backend.Data
                 .HasForeignKey(p => p.SubCategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
             builder.Entity<Product>()
-                .HasIndex(p => new { p.Featured, p.DateAvailable });
+                .HasIndex(p => p.DateAvailable);
         }
 
         public DbSet<Order> Orders { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<ProductImages> ProductImages { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<SubCategory> SubCategories { get; set; }

@@ -254,16 +254,16 @@ namespace Backend.Migrations
 
                     b.HasIndex("CategoryId");
 
+                    b.HasIndex("DateAvailable");
+
                     b.HasIndex("OrderId");
 
                     b.HasIndex("SubCategoryId");
 
-                    b.HasIndex("Featured", "DateAvailable");
-
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Backend.Models.ProductImage", b =>
+            modelBuilder.Entity("Backend.Models.ProductImages", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -396,29 +396,44 @@ namespace Backend.Migrations
                         {
                             Id = "hafeezomair@gmail.com",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d53567a2-e550-4d80-b8e2-5ca5c1f3c02e",
+                            ConcurrencyStamp = "f402f028-3921-452e-9e4f-0f7b0aa88e33",
                             Email = "hafeezomair@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "hafeezomair@gmail.com",
                             NormalizedUserName = "hafeezomair",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "bddbd9a5-82cf-4693-a3ae-5fb9e9f623ca",
+                            SecurityStamp = "813710e0-8402-4cab-9e73-25e4e7aa25fd",
                             TwoFactorEnabled = false,
                             UserName = "hafeezomair"
                         },
                         new
                         {
+                            Id = "mujahidkhan17@gmail.com",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "64322cac-4348-4b06-b819-d67d810507b0",
+                            Email = "mujahidkhan17@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "mujahidkhan17@gmail.com",
+                            NormalizedUserName = "mujahidkhan17",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "4eab4d27-ca29-425e-9b23-939031663990",
+                            TwoFactorEnabled = false,
+                            UserName = "mujahidkhan17"
+                        },
+                        new
+                        {
                             Id = "ubaid1900@gmail.com",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b67f800d-d3bb-453e-b972-eaeaa3862f58",
+                            ConcurrencyStamp = "40336f78-da4d-48d1-97ea-16617b2dba23",
                             Email = "ubaid1900@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ubaid1900@gmail.com",
                             NormalizedUserName = "ubaid1900",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "02043723-89c6-4ba0-84bc-b31103af4d8c",
+                            SecurityStamp = "f6f004b8-6a45-414b-bfbc-14c784a75c14",
                             TwoFactorEnabled = false,
                             UserName = "ubaid1900"
                         },
@@ -426,14 +441,14 @@ namespace Backend.Migrations
                         {
                             Id = "customerSome@gmail.com",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9dc7d678-df81-4397-81f6-9745cd1e4a7c",
+                            ConcurrencyStamp = "83f746e4-37bd-4fe7-9a51-281fce2c4950",
                             Email = "customerSome@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "customerSome@gmail.com",
                             NormalizedUserName = "customerSome",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "f489eaad-f8b4-4a26-a871-f7a8e5b965ce",
+                            SecurityStamp = "fe62835d-06e7-423a-952d-9752a142e420",
                             TwoFactorEnabled = false,
                             UserName = "customerSome"
                         });
@@ -468,15 +483,15 @@ namespace Backend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "b817f77d-521a-44df-b296-14034216e6a7",
-                            ConcurrencyStamp = "927fe1ca-0417-4f12-b6a5-4f07f7142e5b",
+                            Id = "42010c77-e832-44d5-81d4-7c2a76e17cd9",
+                            ConcurrencyStamp = "a59b35dd-2b8f-48bf-9307-96c6018beab9",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "cd3452a2-f3b8-4dcc-b269-111b42552788",
-                            ConcurrencyStamp = "f42cf73b-6707-4c2b-aab6-38eb64c2276a",
+                            Id = "c6682250-f4f6-4385-a7af-3a525fe5437e",
+                            ConcurrencyStamp = "0e7a64e2-bf3d-4dea-ba1d-4f2397f1b519",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         });
@@ -570,22 +585,22 @@ namespace Backend.Migrations
                         new
                         {
                             UserId = "hafeezomair@gmail.com",
-                            RoleId = "b817f77d-521a-44df-b296-14034216e6a7"
+                            RoleId = "42010c77-e832-44d5-81d4-7c2a76e17cd9"
+                        },
+                        new
+                        {
+                            UserId = "mujahidkhan17@gmail.com",
+                            RoleId = "42010c77-e832-44d5-81d4-7c2a76e17cd9"
                         },
                         new
                         {
                             UserId = "ubaid1900@gmail.com",
-                            RoleId = "b817f77d-521a-44df-b296-14034216e6a7"
+                            RoleId = "42010c77-e832-44d5-81d4-7c2a76e17cd9"
                         },
                         new
                         {
                             UserId = "customerSome@gmail.com",
-                            RoleId = "cd3452a2-f3b8-4dcc-b269-111b42552788"
-                        },
-                        new
-                        {
-                            UserId = "hashonecreations1@gmail.com",
-                            RoleId = "b817f77d-521a-44df-b296-14034216e6a7"
+                            RoleId = "c6682250-f4f6-4385-a7af-3a525fe5437e"
                         });
                 });
 
@@ -646,7 +661,7 @@ namespace Backend.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("Backend.Models.ProductImage", b =>
+            modelBuilder.Entity("Backend.Models.ProductImages", b =>
                 {
                     b.HasOne("Backend.Models.Product", null)
                         .WithMany("Images")

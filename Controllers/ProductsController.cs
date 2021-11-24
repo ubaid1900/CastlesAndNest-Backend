@@ -52,7 +52,7 @@ namespace Backend.Controllers
             return await prds.OrderByDescending(p => p.Featured).ThenByDescending(prd => prd.DateAvailable)
                 .Select(prd => new Product()
                 {
-                    Images = new ProductImage[] { prd.Images.OrderBy(pi => pi.Id).FirstOrDefault() },
+                    Images = new ProductImages[] { prd.Images.OrderBy(pi => pi.Id).FirstOrDefault() },
                     Id = prd.Id,
                     Price = prd.Price,
                     Name = prd.Name,
@@ -116,7 +116,7 @@ namespace Backend.Controllers
 
             return await relatedProducts.Select(prd => new Product()
             {
-                Images = new ProductImage[] { prd.Images.OrderBy(pi => pi.Id).FirstOrDefault() },
+                Images = new ProductImages[] { prd.Images.OrderBy(pi => pi.Id).FirstOrDefault() },
                 Id = prd.Id,
                 Price = prd.Price,
                 Name = prd.Name,
@@ -151,7 +151,7 @@ namespace Backend.Controllers
             var newProductIds = incomingProductIds?.Except(existingProductIds);
             var toDeleteProductIds = incomingProductIds == null ? existingProductIds : existingProductIds.Except(incomingProductIds);
 
-            foreach (ProductImage child in images)
+            foreach (ProductImages child in images)
             {
                 if (toDeleteProductIds.Contains(child.Id))
                 {
