@@ -31,7 +31,7 @@ namespace Backend.Models
         public string FlipkartLink { get; set; }
         [Column(TypeName = "money")] public decimal Price { get; set; }
         public int AvailableQuantity { get; set; }
-        public ICollection<ProductImages> Images { get; set; }
+        public ICollection<ProductImage> Images { get; set; }
         public DateTime DateAvailable { get; set; }
         public bool Exclude { get; set; }
         public bool Featured { get; set; }
@@ -60,7 +60,7 @@ namespace Backend.Models
         public string ImageUrl { get; set; }
     }
 
-    public class ProductImages
+    public class ProductImage
     {
         public int Id { get; set; }
         public int ProductId { get; set; }
