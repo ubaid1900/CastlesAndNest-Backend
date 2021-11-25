@@ -120,10 +120,37 @@ namespace Backend
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, CastlesAndNestAppDbContext dataContext)
         {
             app.UseResponseCompression();
-            /* Clear Users, Roles and UserRoles. MAKE SURE THERE IS AT LEAST ONE ADMIN IN THE SEEDING SCRIPT
+            /* Clear Users, Roles and UserRoles. MAKE SURE THERE IS AT LEAST ONE ADMIN IN THE SEEDING
             dataContext.UserRoles.RemoveRange(dataContext.UserRoles.ToArray());
             dataContext.Users.RemoveRange(dataContext.Users.ToArray());
             dataContext.Roles.RemoveRange(dataContext.Roles.ToArray());
+            dataContext.SaveChanges();
+            */
+
+            /* add users without needing a add-migration
+            var adminRole = new IdentityRole
+            {
+                Name = "Administrator",
+                NormalizedName = "ADMINISTRATOR"
+            };
+            var customerRole = new IdentityRole
+            {
+                Name = "Customer",
+                NormalizedName = "CUSTOMER"
+            };
+            var adminRoleDB = dataContext.Roles.Add(adminRole);
+            var custoRoleDB = dataContext.Roles.Add(customerRole);
+            dataContext.SaveChanges();
+            var adminOmair = dataContext.Users.Add(new User { Id = "hafeezomair@gmail.com", Email = "hafeezomair@gmail.com", NormalizedEmail = "hafeezomair@gmail.com", UserName = "hafeezomair", NormalizedUserName = "hafeezomair", EmailConfirmed = true, SecurityStamp = Guid.NewGuid().ToString() });
+            var adminHashone = dataContext.Users.Add(new User { Id = "hashonecreations1@gmail.com", Email = "hashonecreations1@gmail.com", NormalizedEmail = "hashonecreations1@gmail.com", UserName = "hashonecreations1", NormalizedUserName = "hashonecreations1", EmailConfirmed = true, SecurityStamp = Guid.NewGuid().ToString() });
+            var adminUbaid = dataContext.Users.Add(new User { Id = "ubaid1900@gmail.com", Email = "ubaid1900@gmail.com", NormalizedEmail = "ubaid1900@gmail.com", UserName = "ubaid1900", NormalizedUserName = "ubaid1900", EmailConfirmed = true, SecurityStamp = Guid.NewGuid().ToString() });
+            var customerSome = dataContext.Users.Add(new User { Id = "customerSome@gmail.com", Email = "customerSome@gmail.com", NormalizedEmail = "customerSome@gmail.com", UserName = "customerSome", NormalizedUserName = "customerSome", EmailConfirmed = true, SecurityStamp = Guid.NewGuid().ToString() });
+            dataContext.SaveChanges();
+
+            dataContext.UserRoles.Add(new IdentityUserRole<string>() { RoleId = adminRoleDB.Entity.Id, UserId = adminOmair.Entity.Id });
+            dataContext.UserRoles.Add(new IdentityUserRole<string>() { RoleId = adminRoleDB.Entity.Id, UserId = adminHashone.Entity.Id });
+            dataContext.UserRoles.Add(new IdentityUserRole<string>() { RoleId = adminRoleDB.Entity.Id, UserId = adminUbaid.Entity.Id });
+            dataContext.UserRoles.Add(new IdentityUserRole<string>() { RoleId = custoRoleDB.Entity.Id, UserId = customerSome.Entity.Id });
             dataContext.SaveChanges();
             */
 
