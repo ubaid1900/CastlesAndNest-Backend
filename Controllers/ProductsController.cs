@@ -25,7 +25,7 @@ namespace Backend.Controllers
         // GET: api/Products
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts(
-            [FromQuery] int relatedId, [FromQuery] int catId, [FromQuery] int subCatId, [FromQuery] int limit)
+            [FromQuery] int relatedId, [FromQuery] int catId, [FromQuery] int subCatId, [FromQuery] int limit, [FromQuery] string query)
         {
             if (relatedId > 0)
             {
@@ -48,8 +48,13 @@ namespace Backend.Controllers
                     .OrderByDescending(p => p.Featured).ThenByDescending(prd => prd.DateAvailable)
                     .Take(limit);
             }
+            if (!string.IsNullOrWhiteSpace(query))
+            {
+                prds = prds.Where(book => book.Name.ToLower().Contains(query.ToLower()));
+            }
 
             return await prds.OrderByDescending(p => p.Featured).ThenByDescending(prd => prd.DateAvailable)
+                .AsNoTracking()
                 .Select(prd => new Product()
                 {
                     Images = new ProductImage[] { prd.Images.OrderBy(pi => pi.Id).FirstOrDefault() },
@@ -114,7 +119,7 @@ namespace Backend.Controllers
                 relatedProducts = relatedProducts.Union(catRelatedProducts);
             }
 
-            return await relatedProducts.Select(prd => new Product()
+            return await relatedProducts.AsNoTracking().Select(prd => new Product()
             {
                 Images = new ProductImage[] { prd.Images.OrderBy(pi => pi.Id).FirstOrDefault() },
                 Id = prd.Id,
@@ -131,7 +136,7 @@ namespace Backend.Controllers
         public async Task<ActionResult<IEnumerable<Product>>> Search(string query)
         {
             return await _context.Products.Where(book => book.Name.ToLower().Contains(query.ToLower()))
-                .OrderByDescending(p => p.Featured).ThenByDescending(p => p.DateAvailable).ToListAsync();
+                .OrderByDescending(p => p.Featured).ThenByDescending(p => p.DateAvailable).AsNoTracking().ToListAsync();
         }
         // PUT: api/Products/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
