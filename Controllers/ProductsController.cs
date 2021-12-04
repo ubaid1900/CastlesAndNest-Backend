@@ -85,46 +85,74 @@ namespace Backend.Controllers
             return product;
         }
 
+
         private async Task<ActionResult<IEnumerable<Product>>> GetRelatedProducts(int id, int limit)
         {
-            var products = await _context.Products
-                .Where(p => p.Id == id)
-                .Select(p => new { p.Id, p.CategoryId, p.SubCategoryId }).ToListAsync();
-            var product = products.FirstOrDefault();
+            var product = await _context.Products.AsNoTracking()
+                .Select(p => new { p.Id, p.CategoryId, p.SubCategoryId })
+                .FirstOrDefaultAsync(p => p.Id == id);
 
             if (product == null)
             {
                 return Ok();
             }
-            var relatedProducts = _context.Products
-                .Where(p => p.Id != id && p.SubCategoryId != null && p.SubCategoryId == product.SubCategoryId)
+            var relatedProducts = await _context.Products.AsNoTracking()
+                .Where(p => p.Id != id && product.SubCategoryId != null && p.SubCategoryId == product.SubCategoryId)
                 .OrderByDescending(p => p.Featured).ThenByDescending(p => p.DateAvailable)
-                .Take(limit);
+                .Take(limit)
+                .Select(prd => new
+                {
+                    Images = new ProductImage[] { prd.Images.OrderBy(pi => pi.Id).FirstOrDefault() },
+                    Id = prd.Id,
+                    Price = prd.Price,
+                    Name = prd.Name,
+                    DateAvailable = prd.DateAvailable,
+                    Featured = prd.Featured,
+                    Exclude = prd.Exclude,
+                    Order = 1
+                }).ToListAsync();
             if (relatedProducts.Count() < limit)
             {
                 var relPids = relatedProducts.Select(p => p.Id);
-                var catRelatedProducts = _context.Products
+                var catRelatedProducts = await _context.Products.AsNoTracking()
                     .Where(p => p.Id != id && !relPids.Contains(p.Id) && p.CategoryId == product.CategoryId)
                     .OrderByDescending(p => p.Featured).ThenByDescending(p => p.DateAvailable)
-                    .Take(limit - relatedProducts.Count());
-                relatedProducts = relatedProducts.Union(catRelatedProducts);
+                    .Take(limit - relatedProducts.Count())
+                    .Select(prd => new
+                    {
+                        Images = new ProductImage[] { prd.Images.OrderBy(pi => pi.Id).FirstOrDefault() },
+                        Id = prd.Id,
+                        Price = prd.Price,
+                        Name = prd.Name,
+                        DateAvailable = prd.DateAvailable,
+                        Featured = prd.Featured,
+                        Exclude = prd.Exclude,
+                        Order = 2
+                    }).ToListAsync();
+                relatedProducts = relatedProducts.Union(catRelatedProducts).ToList();
             }
             if (relatedProducts.Count() < limit)
             {
                 var relPids = relatedProducts.Select(p => p.Id);
-                var catRelatedProducts = _context.Products
+                var miscRelatedProducts = _context.Products.AsNoTracking()
                     .Where(p => p.Id != id && !relPids.Contains(p.Id))
                     .OrderByDescending(p => p.Featured).ThenByDescending(p => p.DateAvailable)
-                    .Take(limit - relatedProducts.Count());
-                relatedProducts = relatedProducts.Union(catRelatedProducts);
+                    .Take(limit - relatedProducts.Count())
+                    .Select(prd => new
+                    {
+                        Images = new ProductImage[] { prd.Images.OrderBy(pi => pi.Id).FirstOrDefault() },
+                        Id = prd.Id,
+                        Price = prd.Price,
+                        Name = prd.Name,
+                        DateAvailable = prd.DateAvailable,
+                        Featured = prd.Featured,
+                        Exclude = prd.Exclude,
+                        Order = 3
+                    });
+                relatedProducts = relatedProducts.Union(miscRelatedProducts).ToList();
             }
 
-            return await relatedProducts.AsNoTracking()
-                .OrderBy(p=>p.SubCategoryId)
-                .ThenBy(p=>p.CategoryId)
-                .ThenBy(p=>p.Featured)
-                .ThenByDescending(p=>p.DateAvailable)
-                .Select(prd => new Product()
+            return relatedProducts.OrderBy(p => p.Order).Select(prd => new Product()
             {
                 Images = new ProductImage[] { prd.Images.OrderBy(pi => pi.Id).FirstOrDefault() },
                 Id = prd.Id,
@@ -133,7 +161,7 @@ namespace Backend.Controllers
                 DateAvailable = prd.DateAvailable,
                 Featured = prd.Featured,
                 Exclude = prd.Exclude
-            }).ToListAsync();
+            }).ToList();
         }
 
         [HttpGet]
