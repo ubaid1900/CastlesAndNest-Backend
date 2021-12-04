@@ -97,7 +97,7 @@ namespace Backend.Controllers
                 return Ok();
             }
             var relatedProducts = _context.Products
-                .Where(p => p.Id != id && p.SubCategoryId == product.SubCategoryId)
+                .Where(p => p.Id != id && p.SubCategoryId != null && p.SubCategoryId == product.SubCategoryId)
                 .OrderByDescending(p => p.Featured).ThenByDescending(p => p.DateAvailable)
                 .Take(limit);
             if (relatedProducts.Count() < limit)
@@ -119,7 +119,12 @@ namespace Backend.Controllers
                 relatedProducts = relatedProducts.Union(catRelatedProducts);
             }
 
-            return await relatedProducts.AsNoTracking().Select(prd => new Product()
+            return await relatedProducts.AsNoTracking()
+                .OrderBy(p=>p.SubCategoryId)
+                .ThenBy(p=>p.CategoryId)
+                .ThenBy(p=>p.Featured)
+                .ThenByDescending(p=>p.DateAvailable)
+                .Select(prd => new Product()
             {
                 Images = new ProductImage[] { prd.Images.OrderBy(pi => pi.Id).FirstOrDefault() },
                 Id = prd.Id,
